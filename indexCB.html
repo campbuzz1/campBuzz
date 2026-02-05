@@ -13,117 +13,86 @@
             --white: #ffffff;
             --shadow: 0 4px 15px rgba(0,0,0,0.08);
         }
+
         body, html {
             margin: 0;
             padding: 0;
-            font-family: 'DM Serif Display',serif,'Times New Roman', Times, serif, Verdana, sans-serif;
+            font-family: 'DM Serif Display', serif;
             background-color: var(--bg-color);
             overflow-x: hidden;
-            scroll-behavior: smooth;
         }
+
         #splash-screen {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100vh;
-            background: var(--dark-blue);
+            background: #ffffff;
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
             z-index: 2000;
-            animation: fadeOut 0.8s ease forwards 2.4s;
+            transition: opacity 0.8s ease, visibility 3s;
         }
 
-        .splash-logo {
-            font-size: 3.5rem;
-            font-weight: bold;
-            color: var(--white);
+        #intro-video {
+            max-width: 100%;
+            max-height: 80vh;
+            outline: none;
+        }
+
+        .hidden {
             opacity: 0;
-            transform: translateY(30px);
-            animation: fadeInUp 1.3s ease forwards 0.5s;
+            visibility: hidden;
         }
 
-        .splash-logo span { color: var(--primary); }
-
-        .splash-tagline {
-            color: #a4b0be;
-            margin-top: 15px;
-            font-size: 1.2rem;
-            opacity: 0;
-            animation: fadeIn 1s ease forwards 1.2s;
-        }
-
-        @keyframes fadeInUp {
-            to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes fadeIn { to { opacity: 1; } }
-        @keyframes fadeOut { to { opacity: 0; visibility: hidden; } }
         .header-container {
             padding: 40px 20px 20px;
             max-width: 600px;
             margin: 0 auto;
-            opacity: 0;
-            animation: fadeIn 0.8s ease forwards 2.8s;
+            text-align: center;
         }
+
         .main-title {
             margin: 0;
             font-size: 3.2rem;
             font-weight: 800;
             color: var(--dark-blue);
         }
+
         .main-title span { color: var(--primary); }
+
         .tagline {
-            margin-left: 108px; 
-            margin-top: -2px;
+            margin: -2px auto 0;
             font-size: 1.1rem;
             font-weight: 500;
             color: var(--text-gray);
-            letter-spacing: 0.5px;
         }
-        .main-content {
-            padding-bottom: 100px;
-            opacity: 0;
-            animation: fadeIn 0.8s ease forwards 3s;
-        }
+
         .feed-container {
             max-width: 550px;
             margin: 20px auto;
-            padding: 0 15px;
+            padding: 0 15px 100px;
         }
-        .section-label {
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: #a4b0be;
-            margin-bottom: 15px;
-            display: block;
-        }
+
         .post-card {
             background: var(--white);
             border-radius: 20px;
             padding: 20px;
             margin-bottom: 20px;
             box-shadow: var(--shadow);
-            border: 1px solid rgba(0,0,0,0.02);
         }
-        .post-card h3 {
-            margin: 10px 0;
-            color: var(--dark-blue);
-        }
+
         .post-meta {
             display: flex;
             justify-content: space-between;
             font-size: 0.85rem;
             color: var(--primary);
             font-weight: 600;
+            margin-bottom: 10px;
         }
-        .post-desc {
-            color: #747d8c;
-            font-size: 0.95rem;
-            line-height: 1.5;
-        }
+
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -136,9 +105,8 @@
             align-items: center;
             box-shadow: 0 -5px 20px rgba(0,0,0,0.05);
             z-index: 1000;
-            opacity: 0;
-            animation: fadeIn 1.5s ease forwards 3.2s;
         }
+
         .nav-item {
             text-decoration: none;
             color: #a4b0be;
@@ -146,10 +114,8 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            font-weight: 600;
         }
-        .nav-item.active { color: var(--primary); }
-        .nav-icon { font-size: 1.4rem; margin-bottom: 4px; }
+
         .admin-action {
             background: var(--primary);
             width: 60px;
@@ -161,21 +127,18 @@
             color: var(--white);
             font-size: 2.2rem;
             margin-top: -45px;
-            box-shadow: 0 8px 20px rgba(255, 71, 87, 0.3);
             border: 5px solid var(--bg-color);
             cursor: pointer;
-            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        .admin-action:hover {
-            transform: scale(1.1) rotate(90deg);
         }
     </style>
 </head>
 <body>
 
     <div id="splash-screen">
-        <div class="splash-logo">Camp<span>Buzz</span></div>
-        <div class="splash-tagline">Never miss a Buzz...</div>
+        <video id="intro-video" autoplay muted playsinline>
+            <source src="Black and White Minimalist Art & Design Logo (2).mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
     </div>
 
     <div class="main-content">
@@ -185,9 +148,39 @@
         </header>
 
         <main class="feed-container">
-            <span class="section-label">Trending Now</span>
+            <article class="post-card">
+                <div class="post-meta"><span>#Coding</span><span>Ends: 05 Feb</span></div>
+                <h3>Builder's Cohort</h3>
+                <p>Learn the backend magic with Java. Exclusive for Beginners.</p>
+            </article>
 
             <article class="post-card">
-                <div class="post-meta">
-                    <span class="post-author">Admin</span>
-                    <span class="post-timestamp">2 hrs ago</span>
+                <div class="post-meta"><span>#Dance</span><span>Ends: 12 Feb</span></div>
+                <h3>Danza Mega Fest 2026</h3>
+                <p>The annual college dance competition is back!</p>
+            </article>
+        </main>
+    </div>
+
+    <nav class="bottom-nav">
+        <a href="#" class="nav-item">🏠<br>Home</a>
+        <a href="#" class="nav-item">💻<br>Communities</a>
+        <div class="admin-action">+</div>
+        <a href="#" class="nav-item">🔔<br>For You</a>
+        <a href="#" class="nav-item">👤<br>Profile</a>
+    </nav>
+
+    <script>
+        const video = document.getElementById('intro-video');
+        const splash = document.getElementById('splash-screen');
+        
+        video.onended = function() {
+            splash.classList.add('hidden');
+        };
+        setTimeout(() => {
+            splash.classList.add('hidden');
+        }, 4000);
+    </script>
+
+</body>
+</html>
