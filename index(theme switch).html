@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampBuzz | Stay Updated</title>
+    <style>
+        /* 1. Define Variables (Light Mode Default) */
+        :root {
+            --primary: #ff4757;
+            --dark-blue: #2f3542; /* Kept for legacy reference */
+
+            /* Dynamic Variables for Theme Switching */
+            --bg-color: #f1f2f6;
+            --text-gray: #57606f;
+            --white: #ffffff;
+            --shadow: 0 4px 15px rgba(0,0,0,0.08);
+
+            /* New variables mapped to your original look */
+            --card-bg: #ffffff;
+            --text-main: #2f3542;
+            --nav-bg: #ffffff;
+        }
+
+        /* 2. Define Dark Mode Overrides */
+        [data-theme="dark"] {
+            --bg-color: #1e272e;     /* Midnight Black */
+            --card-bg: #2f3542;      /* Dark Slate */
+            --text-main: #ffa502;    /* Bright Orange (Random Highlight) */
+            --text-gray: #ced6e0;    /* Light Silver */
+            --nav-bg: #2f3542;       /* Dark Nav */
+            --shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        /* 3. Global Resets & Transitions */
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'DM Serif Display', serif;
+            background-color: var(--bg-color);
+            color: var(--text-main); /* Added for text color transition */
+            overflow-x: hidden;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* --- THEME SWITCH STYLES --- */
+        .theme-switch {
+            display: inline-block;
+            height: 24px;
+            position: relative;
+            width: 50px;
+        }
+        .theme-switch input { display:none; }
+
+        .slider {
+            background-color: #ccc;
+            bottom: 0;
+            cursor: pointer;
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        .slider:before {
+            background-color: #fff;
+            bottom: 4px;
+            content: "";
+            height: 16px;
+            left: 4px;
+            position: absolute;
+            transition: .4s;
+            width: 16px;
+            border-radius: 50%;
+        }
+        input:checked + .slider { background-color: var(--primary); }
+        input:checked + .slider:before { transform: translateX(26px); }
+        /* --------------------------- */
+
+        /* Splash Screen */
+        #splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            transition: opacity 0.8s ease, visibility 3s;
+        }
+
+        #intro-video {
+            max-width: 100%;
+            max-height: 80vh;
+            outline: none;
+        }
+
+        .hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        /* Header */
+        .header-container {
+            padding: 40px 20px 20px;
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .main-title {
+            margin: 0;
+            font-size: 3.2rem;
+            font-weight: 800;
+            color: var(--text-main); /* Updated to use dynamic variable */
+        }
+
+        .main-title span { color: var(--primary); }
+
+        .tagline {
+            margin: -2px auto 0;
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: var(--text-gray);
+        }
+
+        /* Feed */
+        .feed-container {
+            max-width: 550px;
+            margin: 20px auto;
+            padding: 0 15px 100px;
+        }
+
+        .post-card {
+            background: var(--card-bg); /* Updated to use dynamic variable */
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+            color: var(--text-main); /* Ensure text inside cards changes too */
+        }
+
+        .post-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 75px;
+            background: var(--nav-bg); /* Updated to use dynamic variable */
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.05);
+            z-index: 1000;
+            transition: background 0.3s ease;
+        }
+
+        .nav-item {
+            text-decoration: none;
+            color: #a4b0be;
+            font-size: 0.75rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .admin-action {
+            background: var(--primary);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--white);
+            font-size: 2.2rem;
+            margin-top: -45px;
+            border: 5px solid var(--bg-color); /* Updated border to match bg */
+            cursor: pointer;
+            transition: border-color 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="splash-screen">
+        <video id="intro-video" autoplay muted playsinline>
+            <source src="{{ url_for('static', filename='assets/intro.mp4') }}" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+
+    <div class="theme-switch-wrapper" style="position: absolute; top: 20px; right: 20px; z-index: 3000; display: flex; align-items: center; gap: 10px;">
+        <em style="font-style: normal; font-size: 0.8rem; color: var(--text-gray); font-family: sans-serif;">Theme</em>
+        <label class="theme-switch" for="checkbox">
+            <input type="checkbox" id="checkbox" />
+            <div class="slider"></div>
+        </label>
+    </div>
+
+    <div class="main-content">
+        <header class="header-container">
+            <h1 class="main-title">Camp<span>Buzz</span></h1>
+            <div class="tagline">Never miss a Buzz...</div>
+        </header>
+
+        <main class="feed-container">
+            {% for event in events %}
+            <article class="post-card">
+                <div class="post-meta">
+                    <span>#{{ event['organizer'] }}</span>
+                    <span>Date: {{ event['date'] }}</span>
+                </div>
+                <h3>{{ event['title'] }}</h3>
+                <p>{{ event['description'] }}</p>
+            </article>
+            {% else %}
+            <div style="text-align: center; color: #888; padding: 40px;">
+                <h3>No Buzz Yet 🐝</h3>
+                <p>Wait for the Admin to post updates!</p>
+            </div>
+            {% endfor %}
+        </main>
+    </div>
+
+    <nav class="bottom-nav">
+        <a href="#" class="nav-item">🏠<br>Home</a>
+        <a href="#" class="nav-item">💻<br>Communities</a>
+        <a href="/admin" style="text-decoration: none;">
+            <div class="admin-action">+</div>
+        </a>
+        <a href="#" class="nav-item">🔔<br>For You</a>
+        <a href="#" class="nav-item">👤<br>Profile</a>
+    </nav>
+
+    <script>
+        // 1. Splash Screen Logic
+        const video = document.getElementById('intro-video');
+        const splash = document.getElementById('splash-screen');
+
+        if (video) {
+            video.onended = function() {
+                splash.classList.add('hidden');
+            };
+        }
+        setTimeout(() => {
+            splash.classList.add('hidden');
+        }, 4000);
+
+        // 2. Theme Switch Logic
+        const toggleSwitch = document.querySelector('#checkbox');
+        const currentTheme = localStorage.getItem('theme');
+
+        // Load saved preference
+        if (currentTheme) {
+            document.documentElement.setAttribute('data-theme', currentTheme);
+            if (currentTheme === 'dark') {
+                toggleSwitch.checked = true;
+            }
+        }
+
+        // Handle switching
+        function switchTheme(e) {
+            if (e.target.checked) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                document.documentElement.setAttribute('data-theme', 'light');
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        if (toggleSwitch) {
+            toggleSwitch.addEventListener('change', switchTheme, false);
+        }
+    </script>
+
+</body>
+</html>
